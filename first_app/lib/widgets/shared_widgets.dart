@@ -3,59 +3,151 @@ import 'package:flutter/material.dart';
 class NumericGrid extends StatelessWidget {
   final List<String> numericButtons;
   final Function(String) onButtonPressed;
+  final int crossAxisCount;
+  final double crossAxisSpacing;
+  final double mainAxisSpacing;
+  final double childAspectRatio;
+  final ButtonStyle? buttonStyle;
 
-  NumericGrid({
+  const NumericGrid({
     required this.numericButtons,
     required this.onButtonPressed,
-  });
+    this.crossAxisCount = 3,
+    this.crossAxisSpacing = 10.0,
+    this.mainAxisSpacing = 10.0,
+    this.childAspectRatio = 3.0,
+    this.buttonStyle,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 3,
+        crossAxisCount: crossAxisCount,
+        crossAxisSpacing: crossAxisSpacing,
+        mainAxisSpacing: mainAxisSpacing,
+        childAspectRatio: childAspectRatio,
       ),
       itemCount: numericButtons.length,
       itemBuilder: (context, index) {
         return ElevatedButton(
           onPressed: () => onButtonPressed(numericButtons[index]),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.grey,
-            foregroundColor: Colors.black,
-            side: BorderSide(color: Colors.black, width: 1),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+          style: buttonStyle ??
+              ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey,
+                foregroundColor: Colors.black,
+                side: const BorderSide(color: Colors.black, width: 1),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
+          child: Text(
+            numericButtons[index],
+            style: const TextStyle(fontSize: 18),
           ),
-          child: Text(numericButtons[index], style: TextStyle(fontSize: 18)),
         );
       },
     );
   }
 }
 
-class Numeric extends StatelessWidget {
+class Numeric extends StatefulWidget {
+  final Function(double) onMultiplierChanged;
+
+  const Numeric({Key? key, required this.onMultiplierChanged}) : super(key: key);
+
+  @override
+  _NumericState createState() => _NumericState();
+}
+
+class _NumericState extends State<Numeric> {
+  double? multiplier;
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: buildNumericGrid(),
+      child: NumericGrid(
+        numericButtons: List.generate(9, (index) => (index + 1).toString()),
+        onButtonPressed: (value) {
+          setState(() {
+            multiplier = int.parse(value).toDouble();
+            widget.onMultiplierChanged(multiplier!); // Notifie le parent
+          });
+        },
+      ),
     );
   }
+}
 
-  Widget buildNumericGrid() {
-    final List<String> numericButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-    return NumericGrid(
-      numericButtons: numericButtons,
-      onButtonPressed: (value) {
-        print('Button pressed: $value');
+class PriceButtonModel {
+  final String name;
+  final Color color;
+  final double price;
+
+  PriceButtonModel({required this.name, required this.color, required this.price});
+}
+
+class PriceButtonGrid extends StatefulWidget {
+  final List<PriceButtonModel> priceButtons;
+  double multiplier;
+
+  PriceButtonGrid({required this.priceButtons, required this.multiplier});
+
+  @override
+  _PriceButtonGridState createState() => _PriceButtonGridState();
+}
+
+class _PriceButtonGridState extends State<PriceButtonGrid> {
+  List<String> selectedActivities = [];
+  double selectedActivitiesPrice = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 1.7,
+      ),
+      itemCount: widget.priceButtons.length,
+      itemBuilder: (context, index) {
+        final activity = widget.priceButtons[index];
+        return ElevatedButton(
+          onPressed: () {
+            setState(() {
+              selectedActivities.add('${widget.multiplier} x ${activity.name} ${activity.price}€');
+              selectedActivitiesPrice += widget.multiplier * activity.price;
+              print(widget.multiplier);
+              widget.multiplier = 1; // Réinitialiser le multiplicateur
+              print('$selectedActivities');
+              print('$selectedActivitiesPrice');
+            });
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: activity.color,
+            foregroundColor: Colors.black,
+            side: BorderSide(color: Colors.black, width: 1),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(activity.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              Text('${activity.price}€', style: TextStyle(fontSize: 14, color: Colors.black)),
+            ],
+          ),
+        );
       },
     );
   }
 }
+
 
 class Burger extends StatefulWidget {
   final int initialSelectedActivitiesPrice;
@@ -146,55 +238,5 @@ class _BurgerState extends State<Burger> {
     }
     int priceToDeduce = int.parse(parts[parts.length - 1]) * int.parse(parts[0]);
     return priceToDeduce;
-  }
-}
-
-
-class PriceButtonModel {
-  final String name;
-  final Color color;
-  final double price;
-
-  PriceButtonModel({required this.name, required this.color, required this.price});
-}
-
-class PriceButtonGrid extends StatelessWidget {
-  final List<PriceButtonModel> priceButtons;
-
-  PriceButtonGrid({required this.priceButtons});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-        childAspectRatio: 1.7,
-      ),
-      itemCount: priceButtons.length,
-      itemBuilder: (context, index) {
-        final activity = priceButtons[index];
-        return ElevatedButton(
-          onPressed: () {
-            print('Activity selected: ${activity.name}');
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: activity.color,
-            foregroundColor: Colors.black,
-            side: BorderSide(color: Colors.black, width: 1),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3)),
-          ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(activity.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                SizedBox(height: 5),
-                Text('${activity.price}€', style: TextStyle(fontSize: 14, color: Colors.black)),
-            ],
-          ),
-        );
-      },
-    );
   }
 }

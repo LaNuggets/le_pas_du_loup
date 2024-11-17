@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:first_app/exportation.dart';
 
-class Sarbacane extends StatelessWidget {
+class Sarbacane extends StatefulWidget{
+  @override
+  _SarbacaneState createState() => _SarbacaneState();
+}
+
+class _SarbacaneState extends State<Sarbacane> {
   final List<PriceButtonModel> priceButtons = [
     PriceButtonModel(name: 'Sarbacane', color: Colors.lightBlueAccent, price: 5),
   ];
+  double multiplier = 1;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +24,15 @@ class Sarbacane extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
               children: [
-                Expanded(child: PriceButtonGrid(priceButtons: priceButtons)),
+                Expanded(child: PriceButtonGrid(priceButtons: priceButtons, multiplier: multiplier)),
                 SizedBox(height: 20),
-                Numeric(),
+                Numeric(
+                    onMultiplierChanged: (value) {
+                      setState(() {
+                        multiplier = value;
+                      });
+                    }
+                ),
               ]
           ),
         )

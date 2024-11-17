@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:first_app/exportation.dart';
 
-class Paintball extends StatelessWidget {
+class Paintball extends StatefulWidget{
+  @override
+  _PaintballState createState() => _PaintballState();
+}
+
+class _PaintballState extends State<Paintball> {
   final List<PriceButtonModel> priceButtons = [
     PriceButtonModel(name: 'Paintball Adultes', color: Colors.lightGreen, price: 25),
     PriceButtonModel(name: 'Paintball Enfants', color: Colors.lightGreen, price: 18),
@@ -14,6 +19,8 @@ class Paintball extends StatelessWidget {
     PriceButtonModel(name: 'Tir parcours', color: Colors.lightGreen, price: 15),
     PriceButtonModel(name: 'Tir parcours Cronus', color: Colors.lightGreen, price: 30),
   ];
+  double multiplier = 1;
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +32,15 @@ class Paintball extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
                 children: [
-                Expanded(child: PriceButtonGrid(priceButtons: priceButtons)),
+                Expanded(child: PriceButtonGrid(priceButtons: priceButtons, multiplier: multiplier)),
                 SizedBox(height: 20),
-                  Numeric(),
+                  Numeric(
+                      onMultiplierChanged: (value) {
+                        setState(() {
+                          multiplier = value;
+                        });
+                      }
+                  ),
                 ]
             ),
         )

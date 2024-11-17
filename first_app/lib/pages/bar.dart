@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:first_app/exportation.dart';
 
-class Bar extends StatelessWidget {
+class Bar extends StatefulWidget{
+  @override
+  _BarState createState() => _BarState();
+}
+
+class _BarState extends State<Bar> {
   final List<PriceButtonModel> priceButtons = [
     PriceButtonModel(name: 'Cannette', color: Colors.brown, price: 2),
     PriceButtonModel(name: 'Bière', color: Colors.brown, price: 4),
@@ -12,6 +17,9 @@ class Bar extends StatelessWidget {
     PriceButtonModel(name: 'Petite Terrine', color: Colors.brown, price: 4),
     PriceButtonModel(name: 'Boudin', color: Colors.brown, price: 6),
   ];
+  double multiplier = 1;
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +31,15 @@ class Bar extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
               children: [
-                Expanded(child: PriceButtonGrid(priceButtons: priceButtons)),
+                Expanded(child: PriceButtonGrid(priceButtons: priceButtons, multiplier: multiplier)),
                 SizedBox(height: 20),
-                Numeric(),
+                Numeric(
+                    onMultiplierChanged: (value) {
+                      setState(() {
+                        multiplier = value;
+                      });
+                    }
+                ),
               ]
           ),
         )
