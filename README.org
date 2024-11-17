@@ -1,0 +1,14 @@
+#+TITLE: Mobile App
+#+AUTHOR: LaNuggets
+
+* What is this app for ?
+ This is a cash register app for 'Le pas du Loup', an leisure center.
+ This will (I hope) help the employees to register all the sale they made
+ and an easiest way to check their balance sheet.
+* Why did i do this app ?
+** Learning
+ I made this for discover and learn Flutter/dart.
+** Help Other
+ My brother asked me to create an app to help him at work.
+** Entertainment
+ This is also to keep me busy.
