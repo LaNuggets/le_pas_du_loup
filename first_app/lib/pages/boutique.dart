@@ -19,7 +19,7 @@ class _BoutiqueState extends State<Boutique> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Paintball'),
+          title: Text('Boutique'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

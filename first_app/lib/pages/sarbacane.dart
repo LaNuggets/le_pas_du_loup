@@ -18,7 +18,7 @@ class _SarbacaneState extends State<Sarbacane> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Paintball'),
+          title: Text('Sarbacane'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

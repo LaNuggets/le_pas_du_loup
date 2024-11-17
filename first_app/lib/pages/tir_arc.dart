@@ -19,7 +19,7 @@ class _Tir_arcState extends State<Tir_arc> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Paintball'),
+          title: Text('Tir à l\'arc'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),

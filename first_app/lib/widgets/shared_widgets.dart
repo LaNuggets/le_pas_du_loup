@@ -101,9 +101,10 @@ class PriceButtonGrid extends StatefulWidget {
   _PriceButtonGridState createState() => _PriceButtonGridState();
 }
 
+List<String> selectedActivities = [];
+double selectedActivitiesPrice = 0;
+
 class _PriceButtonGridState extends State<PriceButtonGrid> {
-  List<String> selectedActivities = [];
-  double selectedActivitiesPrice = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -149,6 +150,17 @@ class _PriceButtonGridState extends State<PriceButtonGrid> {
 }
 
 
+/*
+class Bt extends StatefulWidget{
+  final Function(int) onSelectedActivitiesPriceChange;
+  final Function(List<String>) onSelectedActivitiesChange;
+
+  const Bt({Key? key, required this.onSelectedActivitiesPriceChange, required this.onSelectedActivitiesChange}) : super(key: key);
+
+  @override
+  _BurgerState createState() => _BurgerState();
+}
+*/
 class Burger extends StatefulWidget {
   final int initialSelectedActivitiesPrice;
   final List<String> initialSelectedActivities;

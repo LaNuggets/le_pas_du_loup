@@ -25,7 +25,7 @@ class _BarState extends State<Bar> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Paintball'),
+          title: Text('Bar'),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
