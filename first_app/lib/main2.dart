@@ -12,17 +12,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: HomePages(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
+class HomePages extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePages> {
   int multiplier = 1;
   List<String> selectedActivities = [];
   int selectedActivitiesPrice = 0;

@@ -86,13 +86,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  int selectedActivitiesPrice = 0;
-  List<String> selectedActivities = [];
+  var test = trans.reset();
+  var data = trans.getData();
 
   Widget buildDrawer() {
     return Burger(
-      initialSelectedActivitiesPrice: selectedActivitiesPrice,
-      initialSelectedActivities: selectedActivities,
+      initialSelectedActivitiesPrice: data['activitiesPrice'],
+      initialSelectedActivities: data['activitiesList'],
     );
   }
 }
+Transfer trans = Transfer([], 0);

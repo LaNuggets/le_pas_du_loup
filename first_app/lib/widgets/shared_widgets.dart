@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:first_app/pages/home.dart';
 
 class NumericGrid extends StatelessWidget {
   final List<String> numericButtons;
@@ -123,6 +124,7 @@ class _PriceButtonGridState extends State<PriceButtonGrid> {
             setState(() {
               selectedActivities.add('${widget.multiplier} x ${activity.name} ${activity.price}€');
               selectedActivitiesPrice += widget.multiplier * activity.price;
+              trans.setData(selectedActivities, selectedActivitiesPrice,);
               print(widget.multiplier);
               widget.multiplier = 1; // Réinitialiser le multiplicateur
               print('$selectedActivities');
@@ -150,19 +152,8 @@ class _PriceButtonGridState extends State<PriceButtonGrid> {
 }
 
 
-/*
-class Bt extends StatefulWidget{
-  final Function(int) onSelectedActivitiesPriceChange;
-  final Function(List<String>) onSelectedActivitiesChange;
-
-  const Bt({Key? key, required this.onSelectedActivitiesPriceChange, required this.onSelectedActivitiesChange}) : super(key: key);
-
-  @override
-  _BurgerState createState() => _BurgerState();
-}
-*/
 class Burger extends StatefulWidget {
-  final int initialSelectedActivitiesPrice;
+  final double initialSelectedActivitiesPrice;
   final List<String> initialSelectedActivities;
 
   Burger({
@@ -175,7 +166,7 @@ class Burger extends StatefulWidget {
 }
 
 class _BurgerState extends State<Burger> {
-  late int selectedActivitiesPrice;
+  late double selectedActivitiesPrice;
   late List<String> selectedActivities;
 
   @override
@@ -227,6 +218,7 @@ class _BurgerState extends State<Burger> {
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
+                  trans.reset();
                   selectedActivities.clear();
                   selectedActivitiesPrice = 0;
                 });
@@ -238,17 +230,54 @@ class _BurgerState extends State<Burger> {
               ),
             ),
           ),
+          Divider(),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/paiments');
+              },
+              child: Text('Choix mode de paiments'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  int calculatePrice(String activity) {
+  double calculatePrice(String activity) {
     final parts = activity.split(' ');
     for (var i = 0; i < parts.length; i++) {
       parts[i] = parts[i].replaceAll("€", "");
     }
-    int priceToDeduce = int.parse(parts[parts.length - 1]) * int.parse(parts[0]);
+    double priceToDeduce = double.parse(parts[parts.length - 1]) * double.parse(parts[0]);
     return priceToDeduce;
+  }
+}
+
+
+class Transfer {
+   List<String> activitiesList;
+   double activitiesPrice;
+
+   Transfer(this.activitiesList, this.activitiesPrice);
+
+   Map<String, dynamic> getData(){
+    print('from getData $activitiesList $activitiesPrice');
+    return {'activitiesList': activitiesList, 'activitiesPrice': activitiesPrice};
+  }
+
+  setData(activitiesList1, activitiesPrice1){
+     this.activitiesList = activitiesList1;
+     this.activitiesPrice = activitiesPrice1;
+  }
+
+  reset(){
+     this.activitiesPrice = 0;
+     this.activitiesList = [];
   }
 }

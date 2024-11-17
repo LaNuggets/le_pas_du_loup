@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/paintball': (context) => Paintball(),
         '/sarbacane': (context) => Sarbacane(),
         '/tir_arc': (context) => Tir_arc(),
+        '/paiments': (context) => Paiments(),
       },
     );
   }
